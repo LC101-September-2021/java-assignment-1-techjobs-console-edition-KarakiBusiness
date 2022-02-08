@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,8 +14,8 @@ import java.util.List;
  */
 public class JobData {
 
-    private static final String DATA_FILE = "src/main/resources/job_data.csv";
-    private static boolean isDataLoaded = false;
+    private static final String DATA_FILE = "resources/job_data.csv";
+    private static Boolean isDataLoaded = false;
 
     private static ArrayList<HashMap<String, String>> allJobs;
 
@@ -42,19 +41,16 @@ public class JobData {
             }
         }
 
-        // Bonus mission: sort the results
-        Collections.sort(values);
-
         return values;
     }
 
+    //ran on line ~43
     public static ArrayList<HashMap<String, String>> findAll() {
 
         // load data, if not already loaded
         loadData();
 
-        // Bonus mission; normal version returns allJobs
-        return new ArrayList<>(allJobs);
+        return allJobs;
     }
 
     /**
@@ -79,27 +75,12 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toUpperCase().contains(value)) {
                 jobs.add(row);
             }
         }
 
         return jobs;
-    }
-
-    /**
-     * Search all columns for the given term
-     *
-     * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
-     */
-    public static ArrayList<HashMap<String, String>> findByValue(String value) {
-
-        // load data, if not already loaded
-        loadData();
-
-        // TODO - implement this method
-        return null;
     }
 
     /**
@@ -141,6 +122,31 @@ public class JobData {
             System.out.println("Failed to load job data");
             e.printStackTrace();
         }
+    }
+
+
+    //New Class below:
+    //pass in is a string, and it returns an arraylist of hashmaps
+    public static ArrayList<HashMap<String, String>> findByValue(String value){
+        loadData();
+        //create an arraylist of hashmaps to identify each job
+        ArrayList <HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> keyValuesOfSingleJob: allJobs){
+
+            for (HashMap.Entry<String, String> job: keyValuesOfSingleJob.entrySet()){
+
+                if (value.contains(job.getValue().toUpperCase())) {
+
+                    if (!jobs.contains(keyValuesOfSingleJob)) {
+                        jobs.add(keyValuesOfSingleJob);
+                    }
+                }
+            }
+        }
+        return jobs;
+
+
     }
 
 }
