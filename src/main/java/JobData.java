@@ -131,13 +131,13 @@ public class JobData {
         loadData();
         //create an arraylist of hashmaps to identify each job
         ArrayList <HashMap<String, String>> jobs = new ArrayList<>();
-        //each job in all jobs
+
         for (HashMap<String, String> keyValuesOfSingleJob: allJobs){
-            // key value pair for each item in each row
+
             for (HashMap.Entry<String, String> job: keyValuesOfSingleJob.entrySet()){
-                //if contains add to jobs  if not already contained in keyValue
+
                 if (value.contains(job.getValue().toUpperCase())) {
-                    //if not already contained in keyValue
+
                     if (!jobs.contains(keyValuesOfSingleJob)) {
                         jobs.add(keyValuesOfSingleJob);
                     }

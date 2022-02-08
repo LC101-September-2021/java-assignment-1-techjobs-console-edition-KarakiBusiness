@@ -116,18 +116,16 @@ public class TechJobs {
 
         //iterate through the arraylist of hashmaps someJobs
         for (HashMap<String, String> eachJob: someJobs) {
-            //top line
+
             System.out.println("*****");
-            //iterate over each key of the hashmap of a job
+
             for (HashMap.Entry<String, String> eachKeyValuePair: eachJob.entrySet()) {
-                //prints key value pair by iterating through eachJob
                 System.out.println(eachKeyValuePair.getKey() + ": " + eachKeyValuePair.getValue());
             }
-            //bottom line
+
             System.out.println("*****");
         }
 
-        //if there are no jobs.check case sensitivity
         if(someJobs.isEmpty()){
             System.out.println("job not found");
         }
