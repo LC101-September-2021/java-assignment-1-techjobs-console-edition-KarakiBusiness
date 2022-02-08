@@ -8,8 +8,8 @@ import java.util.Scanner;
  */
 public class TechJobs {
 
-    static Scanner in = new Scanner(System.in);
-
+    private static Scanner in = new Scanner(System.in);
+    //---------------------------------------------------------------------------------------------------------------------
     public static void main (String[] args) {
 
         // Initialize our field map with key/name pairs
@@ -29,23 +29,22 @@ public class TechJobs {
 
         // Allow the user to search until they manually quit
         while (true) {
-
-            String actionChoice = getUserSelection("View jobs by (type 'x' to quit):", actionChoices);
-
-            if (actionChoice == null) {
-                break;
-            } else if (actionChoice.equals("list")) {
-
+            //passes in arguments into getUserSelection and stores returned value into actionChoice
+            String actionChoice = getUserSelection("View jobs by:", actionChoices);
+            //if actionChoice equals list
+            if (actionChoice.equals("list")) {
+                //calls getUserSelection again with choices of column choice(since its list) stores return in column choice
                 String columnChoice = getUserSelection("List", columnChoices);
 
                 if (columnChoice.equals("all")) {
+                    //findAll just loads the data(returns all jobs) to printJobs
                     printJobs(JobData.findAll());
                 } else {
-
+                    //stores the arraylist of chosen value(s) into results
                     ArrayList<String> results = JobData.findAll(columnChoice);
-
+                    //prints out header for natural values
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
-
+                    //iterates through the string arraylist results
                     // Print list of skills, employers, etc
                     for (String item : results) {
                         System.out.println(item);
@@ -54,32 +53,35 @@ public class TechJobs {
 
             } else { // choice is "search"
 
-                // How does the user want to search (e.g. by skill or employer)
+                // stores column choice in searchField
                 String searchField = getUserSelection("Search by:", columnChoices);
 
-                // What is their search term?
-                System.out.println("\nSearch term:");
+                // What is their search term? store it in searchTerm
+                System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
-
+                //returned value of getUserSelection
                 if (searchField.equals("all")) {
-                    printJobs(JobData.findByValue(searchTerm));
+
+                    //System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm.toUpperCase()));
+
                 } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm.toUpperCase()));
                 }
             }
         }
     }
-
+    //---------------------------------------------------------------------------------------------------------------------
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
-        int choiceIdx = -1;
+        Integer choiceIdx;
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
 
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
-        int i = 0;
+        Integer i = 0;
         for (String choiceKey : choices.keySet()) {
             choiceKeys[i] = choiceKey;
             i++;
@@ -90,20 +92,12 @@ public class TechJobs {
             System.out.println("\n" + menuHeader);
 
             // Print available choices
-            for (int j = 0; j < choiceKeys.length; j++) {
+            for (Integer j = 0; j < choiceKeys.length; j++) {
                 System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
             }
 
-            if (in.hasNextInt()) {
-                choiceIdx = in.nextInt();
-                in.nextLine();
-            } else {
-                String line = in.nextLine();
-                boolean shouldQuit = line.equals("x");
-                if (shouldQuit) {
-                    return null;
-                }
-            }
+            choiceIdx = in.nextInt();
+            in.nextLine();
 
             // Validate user's input
             if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
@@ -116,10 +110,28 @@ public class TechJobs {
 
         return choiceKeys[choiceIdx];
     }
-
+    //---------------------------------------------------------------------------------------------------------------------
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        //iterate through the arraylist of hashmaps someJobs
+        for (HashMap<String, String> eachJob: someJobs) {
+            //top line
+            System.out.println("*****");
+            //iterate over each key of the hashmap of a job
+            for (HashMap.Entry<String, String> eachKeyValuePair: eachJob.entrySet()) {
+                //prints key value pair by iterating through eachJob
+                System.out.println(eachKeyValuePair.getKey() + ": " + eachKeyValuePair.getValue());
+            }
+            //bottom line
+            System.out.println("*****");
+        }
+
+        //if there are no jobs.check case sensitivity
+        if(someJobs.isEmpty()){
+            System.out.println("job not found");
+        }
+
+
     }
 }
